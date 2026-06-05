@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JournaLife</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/styles/styles.css">
+    <script src="/scripts/main.mjs" type="module"></script>
 </head>
 
 <body>
@@ -16,17 +17,21 @@
         </header>
 
         <div class="main-wrapper">
-            <h1>Monday 01</h1>
-            <h2>july - 2026</h2>
+            <h1 id="day-display">Day Date</h1>
+            <h2 id="month-year-display">Month - Year</h2>
             <div class="quotes-wrapper">
-                <p class="quote">lorem quote here</p>
+                <p class="quote">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt vitae maiores blanditiis.
+                    Cupiditate, dolor eos? - Jhon Doe</p>
             </div>
             <div class="entry-wrapper">
-                <p class="entry">entry aca perrosk</p>
+                <p class="entry"></p>
+
             </div>
+            <button id="edit-note-btn">Edit</button>
+            <button id="save-note-btn">Save</button>
             <div class="navigation-btns-wrapper">
-                <button class="nav-btn">⟪</button>
-                <button class="nav-btn">⟫</button>
+                <button id="prev-note-btn">⟪</button>
+                <button id="next-note-btn">⟫</button>
             </div>
         </div>
 

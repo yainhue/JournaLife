@@ -14,14 +14,19 @@
 
         <header>
             <p>Header</p>
+            <button id="export-btn">Export entries</button>
+            <button id="import-btn">Import entries</button>
+            <button id="goto-btn">Go to date</button>
+            <button id="theme-btn">Switch theme</button>
+            <button id="favorites-btn">Favorites</button>
+            <button id="compact-btn">Compact View</button>
         </header>
 
         <div class="main-wrapper">
             <h1 id="day-display">Day Date</h1>
             <h2 id="month-year-display">Month - Year</h2>
             <div class="quotes-wrapper">
-                <p class="quote">Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt vitae maiores blanditiis.
-                    Cupiditate, dolor eos? - Jhon Doe</p>
+                <p class="quote"><span class="quoteText">Loading quote</span> - <span class="author">...</span></p>
             </div>
             <div class="entry-wrapper">
                 <p class="entry"></p>
@@ -35,6 +40,9 @@
             </div>
         </div>
 
+        <footer>
+            Inspirational quotes provided by <a href="https://zenquotes.io/" target="_blank">ZenQuotes API</a>
+        </footer>
 
     </main>
 </body>

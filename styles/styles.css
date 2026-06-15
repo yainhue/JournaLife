@@ -8,15 +8,26 @@
     --surface: #f7f9f8;
     --header-bg: #4e2610;
     --text: #3b2f2f;
-    /* tono marrón oscuro */
     --main-bg: #fdf6e3;
-    /* amarillo papel */
     --line-color: #e0d9b5;
-    /* líneas suaves */
     --radius: 12px;
     --shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
+/* DARK MODE: redefine variables */
+body.dark-mode {
+    --bg: #1e1e1e;
+    --surface: #2a2a2a;
+    --header-bg: #2b1a0f;
+    --text: #f0f0f0;
+    --main-bg: #2a2a2a;
+    --line-color: #444;
+    --accent1: #d4a017;
+    --accent2: #555;
+    --accent3: #e57373;
+}
+
+/* RESET */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -24,7 +35,6 @@
 }
 
 /* HEADER */
-
 header {
     background-color: var(--header-bg);
     padding: 1rem;
@@ -40,7 +50,6 @@ header p {
 }
 
 /* MAIN */
-
 .main-wrapper {
     display: flex;
     flex-direction: column;
@@ -52,7 +61,6 @@ header p {
 }
 
 /* TITLES */
-
 h1,
 h2 {
     font-family: 'Literata', serif;
@@ -72,7 +80,6 @@ h2 {
 }
 
 /* QUOTES */
-
 .quotes-wrapper {
     background-color: var(--accent2);
     border-radius: var(--radius);
@@ -89,7 +96,6 @@ h2 {
 }
 
 /* ENTRY AREA */
-
 .entry-wrapper {
     background: repeating-linear-gradient(to bottom,
             var(--main-bg),
@@ -103,8 +109,6 @@ h2 {
     box-shadow: var(--shadow);
     position: relative;
 }
-
-/* Texto y textarea idénticos */
 
 .entry,
 textarea {
@@ -122,7 +126,6 @@ textarea {
 }
 
 /* NAVIGATION BUTTONS */
-
 .navigation-btns-wrapper {
     display: flex;
     justify-content: space-between;
@@ -154,7 +157,8 @@ button:focus-visible {
     outline-offset: 3px;
 }
 
-/* DARK MODE */
+
+/* DARK MODE BASED ON SYSTEM SETTINGS */
 
 /* @media (prefers-color-scheme: dark) {
     :root {

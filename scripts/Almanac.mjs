@@ -1,5 +1,5 @@
 import { getLocalStorage, setLocalStorage } from "./utils.mjs";
-import Entry from "./Entry.mjs";
+// import Entry from "./Entry.mjs";
 
 
 // TO-DO
@@ -14,7 +14,6 @@ export default class Almanac {
     }
 
     // Function used to display the current date
-    // TO-DO: actualizar sistema, este solo pone la fecha de TODAY
     displayDate() {
         // define elements
         const dayDisplay = document.getElementById("day-display");
@@ -50,6 +49,25 @@ export default class Almanac {
         entryDisplay.textContent = entryText
     }
 
+    async displayQuote() {
+        // define default quote text and author
+        let quoteText = "There's more to life than being a passenger.";
+        let authorText = "Amelia Earhart"
+
+        // get a random quote and author from the downloaded quotes
+        const res = await fetch("./quotes.json");
+        const quotes = await res.json();
+        const random = quotes[Math.floor(Math.random() * quotes.length)];
+
+        // define the elements
+        const quoteDisplay = document.querySelector(".quoteText");
+        const authorDisplay = document.querySelector(".author");
+
+        // display the text
+        quoteDisplay.textContent = random.q
+        authorDisplay.textContent = random.a
+    }
+
     saveNote(textareaElement) {
 
         // get the updated text from the textarea
@@ -67,11 +85,6 @@ export default class Almanac {
 
         // store the updated entries object in local storage
         setLocalStorage("entries", this.entries);
-
-        // DEBUGGING PURPOSES, REMOVE LATER!
-        console.log("entry saved to almanac");
-        console.log(this.entries);
-        console.log(this.entries[this.formatDate(this.currentDate)]);
     }
 
     editNote() {
@@ -98,9 +111,10 @@ export default class Almanac {
         entry.replaceWith(textarea);
 
         // listen for the "blur" event on the textarea (when it loses focus)
-        textarea.addEventListener("blur", () => {
-            this.saveNote(textarea);
-        });
+        // textarea.addEventListener("blur", () => {
+        //     this.saveNote(textarea);
+        // });
+        // disabled, caused duplicate calls on the saveNote() function
 
         saveBtn.addEventListener("click", () => {
             this.saveNote(textarea);
@@ -109,11 +123,52 @@ export default class Almanac {
     }
 
     importAlmanac() {
-        // pendiente
+
+        // Create a <input> element to upload the file
+        const input = document.createElement("input")
+        input.type = "file"
+        input.accept = ".json"
+        input.click();
+
+        input.addEventListener("change", () => {
+            const file = input.files[0];
+            if (!file) {
+                console.log("No file selected")
+                return
+            };
+
+            const reader = new FileReader();
+            reader.readAsText(file);
+            reader.onload = () => {
+
+                const text = JSON.parse(reader.result)
+
+                // DEVELOPMENT PURPOSES - REMOVE LATER
+                console.log(text)
+
+                // store the updated entries in local storage
+                this.entries = text;
+                setLocalStorage("entries", this.entries);
+            };
+
+            reader.onerror = () => {
+                console.error("Error caught while reading:", reader.error);
+            };
+        });
+
+        this.displayNote()
     }
 
     exportAlmanac() {
-        // pendiente
+        // create a blob with the entries as the data and a temporary url to export it
+        const blob = new Blob([JSON.stringify(this.entries, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob)
+
+        const link = document.createElement("a")
+        link.href = url
+        link.download = 'almanacEntries.json'
+        link.click();
+        URL.revokeObjectURL(url);
     }
 
     getPreviousEntry() {
@@ -123,6 +178,7 @@ export default class Almanac {
         // refresh date & note display
         this.displayDate()
         this.displayNote()
+        this.displayQuote()
     }
 
     getNextEntry() {
@@ -132,6 +188,7 @@ export default class Almanac {
         // refresh date & note display
         this.displayDate()
         this.displayNote()
+        this.displayQuote()
     }
 
     goToDate() {

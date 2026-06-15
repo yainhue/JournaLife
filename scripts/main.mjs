@@ -1,21 +1,26 @@
 // main.mjs AKA UI Controller
 
-// OLD IMPORTS
-// import displayDate from "./Almanac.mjs";
-// import editNote from "./Entry.mjs";=
-// displayDate();
-
-// new imports
 import Almanac from "./Almanac.mjs";
+import SunriseSunset from "./externalServices.mjs"
 
 const almanac = new Almanac();
+const sunriseSunset = new SunriseSunset();
 
-// Display current date (TEMPORAL, ADAPTAR LUEGO!)
+// ALMANAC FUNCTIONS
+
+// Display current date
 almanac.displayDate();
 
 // Display current note
 almanac.displayNote();
 
+// Display current quote & author
+almanac.displayQuote()
+
+// SUNRISESUNSET FUNCTIONS
+
+// get cords
+sunriseSunset.init();
 
 // EVENT LISTENERS //
 
@@ -24,14 +29,6 @@ const editNoteBtn = document.querySelector("#edit-note-btn");
 editNoteBtn.addEventListener("click", () => {
     almanac.editNote();
 });
-
-// listen for clicks on the "Save Note" button and call the save note function when clicked
-// const saveNoteBtn = document.querySelector("#save-note-btn");
-// saveNoteBtn.addEventListener("click", () => {
-//     almanac.saveNote();
-// });
-// Need to work on this... La funcion depende de un text area, pero si no hay textarea selecionado
-//  como va a guardar la nota? ... pasarle ID?
 
 // listen for clicks on the "nextNote" button and call the corresponding function
 const nextNoteBtn = document.querySelector("#next-note-btn");
@@ -44,3 +41,27 @@ const prevNoteBtn = document.querySelector("#prev-note-btn");
 prevNoteBtn.addEventListener("click", () => {
     almanac.getPreviousEntry();
 });
+
+// export btn
+const exportBtn = document.querySelector("#export-btn");
+exportBtn.addEventListener("click", () => {
+    almanac.exportAlmanac();
+});
+
+// import btn
+const importBtn = document.querySelector("#import-btn");
+importBtn.addEventListener("click", () => {
+    almanac.importAlmanac();
+});
+
+// go to date
+
+// switch theme
+const themesBtn = document.querySelector("#theme-btn");
+themesBtn.addEventListener("click", () => {
+    document.body.classList.toggle("dark-mode");
+});
+
+// favorites
+
+// compact view

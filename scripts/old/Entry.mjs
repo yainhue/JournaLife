@@ -8,7 +8,6 @@ export default class Entry {
     constructor(note = "Tap the edit button to add a note.") {
         // this.date = new Date();
         this.note = note;
-        // Note has a default value that will be displayed if the user hasn't added a note for that day yet.
     }
 }
 

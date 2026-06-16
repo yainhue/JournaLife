@@ -63,27 +63,27 @@ export default class SunriseSunset {
         // update the currentDateNow to right now's date.
         this.currentDateNow = new Date();
 
-        // DEBUG ONLY - CHANGE DATE TO TEST 
+        // DEBUG ONLY - MANUAL DATE CHANGE FOR TESTING
         // this.currentDateNow.setHours(5)
         // this.currentDateNow.setMinutes(30)
         // this.currentDateNow.setSeconds(0)
 
         // DEBUG ONLY
-        console.log(this.sunrise)
-        console.log(this.sunset)
-        console.log(this.currentDateNow)
+        // console.log(this.sunrise)
+        // console.log(this.sunset)
+        // console.log(this.currentDateNow)
 
         // compare the dates and change to dark mode as needed
         if (this.currentDateNow > this.sunset) {
-            console.log("DARK MODE >")
+            // console.log("DARK MODE >")
             document.body.classList.add("dark-mode");
         }
         else if (this.currentDateNow < this.sunrise) {
-            console.log("DARK MODE <")
+            // console.log("DARK MODE <")
             document.body.classList.add("dark-mode");
         }
         else {
-            console.log("LIGHT MODE")
+            // console.log("LIGHT MODE")
             document.body.classList.remove("dark-mode");
         }
     }

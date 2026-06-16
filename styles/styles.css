@@ -25,6 +25,7 @@ body.dark-mode {
     --accent1: #d4a017;
     --accent2: #555;
     --accent3: #e57373;
+    --secondary: #99eb6d;
 }
 
 /* RESET */
@@ -157,15 +158,92 @@ button:focus-visible {
     outline-offset: 3px;
 }
 
+/* UTILS */
 
-/* DARK MODE BASED ON SYSTEM SETTINGS */
+.closed {
+    display: none;
+}
 
-/* @media (prefers-color-scheme: dark) {
-    :root {
-        --bg: #1e1e1e;
-        --surface: #2a2a2a;
-        --text: #f0f0f0;
-        --main-bg: #2a2a2a;
-        --line-color: #444;
-    }
-} */
+/* Estado unmarked (nota NO favorita) */
+#toggle-favorite-btn.unmarked {
+    background-color: transparent;
+    color: #666;
+    /* gris apagado */
+    border: 2px solid #ccc;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#toggle-favorite-btn.unmarked:hover {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+#toggle-favorite-btn.marked {
+    background-color: rgb(189, 161, 2);
+    color: #fff;
+    border: 2px solid rgb(180, 129, 0);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#toggle-favorite-btn.marked:hover {
+    background-color: darkorange;
+    border-color: orange;
+}
+
+#toggle-favorite-btn.unmarked::before {
+    content: "☆";
+    font-size: 1rem;
+    color: #666;
+}
+
+#toggle-favorite-btn.marked::before {
+    content: "★";
+    font-size: 1rem;
+    color: white;
+}
+
+
+.favorites-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+#favorites-dropdown-btn {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    background: #f9f9f9;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.favorites-dropdown-list {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 150px;
+    z-index: 100;
+}
+
+.favorites-dropdown-list li {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.favorites-dropdown-list li:hover {
+    background: #eee;
+}
+
+.favorites-dropdown-list.show {
+    display: block;
+}

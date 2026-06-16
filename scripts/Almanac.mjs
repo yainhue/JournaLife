@@ -1,5 +1,5 @@
 import { getLocalStorage, setLocalStorage } from "./utils.mjs";
-// import Entry from "./Entry.mjs";
+import Entry from "./Entry.mjs";
 
 
 // TO-DO
@@ -10,7 +10,11 @@ export default class Almanac {
     constructor() {
         this.currentDate = new Date();
         this.entries = getLocalStorage("entries") || {};
-        this.defaultText = "Tap the edit button to add a note."
+        this.defaultText = "Tap the edit button to add a note. After that,  tap on the emoji to change the mood";
+
+        // call these once only
+        this.setupFavoritesListeners()
+        this.setupEmojiMoodListeners()
     }
 
     // Function used to display the current date
@@ -34,19 +38,24 @@ export default class Almanac {
     }
 
     displayNote() {
+        // get current date key
+        const dateKey = this.formatDate(this.currentDate);
+
         // define default entry text
         let entryText = this.defaultText;
 
         // get the entry for currentDate
-        if (this.entries[this.formatDate(this.currentDate)]) {
-            entryText = this.entries[this.formatDate(this.currentDate)]
+        if (this.entries[dateKey]) {
+            entryText = this.entries[dateKey].note
+            this.displayFavorite()
         }
 
         // define the element
         const entryDisplay = document.querySelector(".entry");
 
         // display the text
-        entryDisplay.textContent = entryText
+        entryDisplay.innerHTML = entryText
+
     }
 
     async displayQuote() {
@@ -69,9 +78,12 @@ export default class Almanac {
     }
 
     saveNote(textareaElement) {
+        // get current date key
+        const dateKey = this.formatDate(this.currentDate);
 
         // get the updated text from the textarea
         const updatedText = textareaElement.value;
+
         // create a new paragraph element and set its text content to the updated text
         const updatedEntryDisplay = document.createElement("p");
         updatedEntryDisplay.classList.add("entry");
@@ -81,7 +93,10 @@ export default class Almanac {
         textareaElement.replaceWith(updatedEntryDisplay);
 
         // store the entry in the entries property, using the current date as the key and the text as the value
-        this.entries[this.formatDate(this.currentDate)] = updatedText;
+        // create a new entry object to store the entry text
+        const entry = new Entry(dateKey, updatedText)
+
+        this.entries[dateKey] = entry;
 
         // store the updated entries object in local storage
         setLocalStorage("entries", this.entries);
@@ -143,20 +158,21 @@ export default class Almanac {
 
                 const text = JSON.parse(reader.result)
 
-                // DEVELOPMENT PURPOSES - REMOVE LATER
+                // DEBUG - REMOVE LATER
                 console.log(text)
 
                 // store the updated entries in local storage
                 this.entries = text;
                 setLocalStorage("entries", this.entries);
+
+                // render imported entries
+                this.displayNote()
             };
 
             reader.onerror = () => {
                 console.error("Error caught while reading:", reader.error);
             };
         });
-
-        this.displayNote()
     }
 
     exportAlmanac() {
@@ -176,9 +192,7 @@ export default class Almanac {
         this.currentDate.setDate(this.currentDate.getDate() - 1)
 
         // refresh date & note display
-        this.displayDate()
-        this.displayNote()
-        this.displayQuote()
+        this.init();
     }
 
     getNextEntry() {
@@ -186,9 +200,7 @@ export default class Almanac {
         this.currentDate.setDate(this.currentDate.getDate() + 1)
 
         // refresh date & note display
-        this.displayDate()
-        this.displayNote()
-        this.displayQuote()
+        this.init();
     }
 
     goToDate() {
@@ -202,6 +214,182 @@ export default class Almanac {
     formatDate(date) {
         return date.toISOString().split("T")[0]
     }
+
+    toggleFavorite() {
+        // get current date key
+        const dateKey = this.formatDate(this.currentDate);
+
+        // get current entry
+        const currentEntry = this.entries[dateKey];
+
+        // if the entry actually exists...
+        if (this.entries[dateKey]) {
+
+            // if currentEntry is not a favorite 
+            if (currentEntry.favorite == false) {
+                // DEBUG
+                // console.log("Entry is NOT a favorite, marking");
+
+                // mark currentEntry as a favorite
+                currentEntry.favorite = true
+
+                // display button correctly
+                this.displayFavorite()
+            }
+
+            // else, if currentEntry IS already a favorite
+            else {
+                // DEBUG
+                // console.log("Entry IS a favorite, unmarking");
+
+                // remove currentEntry as a favorite
+                currentEntry.favorite = false
+
+                // display button correctly
+                this.displayFavorite()
+            }
+
+            // store the updated entries object in local storage
+            setLocalStorage("entries", this.entries);
+
+            // update favorites list
+            this.populateFavorites()
+        }
+
+        // if the entry doesn't exist, do nothing!
+    }
+
+    displayFavorite() {
+        // get current date key
+        const dateKey = this.formatDate(this.currentDate);
+
+        // get current entry
+        const currentEntry = this.entries[dateKey]
+
+        // define button
+        const toggleFavBtn = document.querySelector("#toggle-favorite-btn")
+
+
+        // if the entry actually exists...
+        if (this.entries[dateKey]) {
+
+            // if currentEntry is not a favorite 
+            if (currentEntry.favorite == false) {
+
+                toggleFavBtn.className = "unmarked";
+
+            }
+
+            // else, if currentEntry IS already a favorite
+            else {
+
+                toggleFavBtn.className = "marked";
+
+            }
+        }
+        else {
+            toggleFavBtn.className = "unmarked";
+        }
+
+    }
+
+    populateFavorites() {
+        const favoritesList = document.getElementById("favorites-dropdown-list");
+        favoritesList.innerHTML = "";
+
+        // for each entry on entries, check for favorites and populate
+        Object.values(this.entries).forEach(entry => {
+
+            if (entry.favorite == true) {
+                const li = document.createElement("li");
+                li.textContent = entry.date;
+                favoritesList.appendChild(li);
+            }
+
+        });
+
+        favoritesList.querySelectorAll("li").forEach(item => {
+            item.addEventListener("click", () => {
+
+                // get the date from the option
+                const entryDate = new Date(item.textContent)
+                entryDate.setMinutes(entryDate.getMinutes() + entryDate.getTimezoneOffset());
+
+                // pass the date to the currentDate and run init()
+                this.currentDate = entryDate;
+                this.init()
+
+                favoritesList.classList.remove("show");
+            });
+        });
+
+    }
+
+    setupFavoritesListeners() {
+        // define elements
+        const favoritesBtn = document.getElementById("favorites-dropdown-btn");
+        const favoritesList = document.getElementById("favorites-dropdown-list");
+
+        favoritesBtn.addEventListener("click", () => {
+            favoritesList.classList.toggle("show");
+        });
+
+    }
+
+    displayEmojiMood() {
+        // def element
+        const emojiDisplay = document.querySelector("#emoji-mood-display")
+
+        // get current date key
+        const dateKey = this.formatDate(this.currentDate);
+
+        if (this.entries[dateKey]) {
+            emojiDisplay.textContent = this.entries[dateKey].moodEmoji
+        }
+
+        else {
+            emojiDisplay.textContent = "😀"
+        }
+    }
+
+    setupEmojiMoodListeners() {
+        // define elements
+        const emojiDisplay = document.querySelector("#emoji-mood-display")
+        const emojiArray = ["😅", "😥", "😎", "😀"]
+
+        // get current date key
+        const dateKey = this.formatDate(this.currentDate);
+
+        emojiDisplay.addEventListener("click", () => {
+
+            const randIndex = Math.floor(Math.random() * 4)
+
+            if (this.entries[dateKey]) {
+                this.entries[dateKey].moodEmoji = emojiArray[randIndex]
+
+            }
+
+            else {
+                emojiDisplay.textContent = "😀"
+            }
+
+            this.displayEmojiMood()
+
+        });
+
+    }
+
+    init() {
+        this.displayDate()
+        this.displayQuote()
+        this.displayNote()
+        this.displayFavorite()
+        this.populateFavorites()
+        this.displayEmojiMood()
+        this.setupEmojiMoodListeners()
+    }
+
+
 }
 
 

@@ -13,27 +13,37 @@
     <main>
 
         <header>
-            <p>Header</p>
-            <button id="export-btn">Export entries</button>
-            <button id="import-btn">Import entries</button>
-            <button id="goto-btn">Go to date</button>
-            <button id="theme-btn">Switch theme</button>
-            <button id="favorites-btn">Favorites</button>
-            <button id="compact-btn">Compact View</button>
+            <div id="header">
+                <p>JournaLife</p>
+                <button id="export-btn">Export entries</button>
+                <button id="import-btn">Import entries</button>
+                <button id="goto-btn">Go to date</button>
+                <button id="theme-btn">Switch theme</button>
+                <div class="favorites-dropdown">
+                    <button id="favorites-dropdown-btn">Favorites ⌄</button>
+                    <ul id="favorites-dropdown-list" class="favorites-dropdown-list">
+                    </ul>
+                </div>
+
+            </div>
+            <button id="compact-btn">Toggle Compact View</button>
         </header>
 
         <div class="main-wrapper">
             <h1 id="day-display">Day Date</h1>
-            <h2 id="month-year-display">Month - Year</h2>
+            <h2><span id="month-year-display">Month - Year</span> - <span id="emoji-mood-display">...</span></h2>
             <div class="quotes-wrapper">
                 <p class="quote"><span class="quoteText">Loading quote</span> - <span class="author">...</span></p>
             </div>
             <div class="entry-wrapper">
                 <p class="entry"></p>
-
             </div>
-            <button id="edit-note-btn">Edit</button>
-            <button id="save-note-btn">Save</button>
+            <div class="controls-wrapper">
+                <button id="edit-note-btn">Edit</button>
+                <button id="save-note-btn">Save</button>
+                <button id="delete-btn">Delete</button>
+                <button id="toggle-favorite-btn"></button>
+            </div>
             <div class="navigation-btns-wrapper">
                 <button id="prev-note-btn">⟪</button>
                 <button id="next-note-btn">⟫</button>
@@ -41,7 +51,8 @@
         </div>
 
         <footer>
-            Inspirational quotes provided by <a href="https://zenquotes.io/" target="_blank">ZenQuotes API</a>
+            <p id="quote-credits">Inspirational quotes provided by <a href="https://zenquotes.io/"
+                    target="_blank">ZenQuotes API</a></p>
         </footer>
 
     </main>

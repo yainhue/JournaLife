@@ -2,24 +2,13 @@
 
 import Almanac from "./Almanac.mjs";
 import SunriseSunset from "./externalServices.mjs"
+import { toggleCompactView } from "./utils.mjs";
 
 const almanac = new Almanac();
 const sunriseSunset = new SunriseSunset();
 
-// ALMANAC FUNCTIONS
-
-// Display current date
-almanac.displayDate();
-
-// Display current note
-almanac.displayNote();
-
-// Display current quote & author
-almanac.displayQuote()
-
-// SUNRISESUNSET FUNCTIONS
-
-// get cords
+// Initialize 
+almanac.init()
 sunriseSunset.init();
 
 // EVENT LISTENERS //
@@ -55,6 +44,7 @@ importBtn.addEventListener("click", () => {
 });
 
 // go to date
+// pendiente
 
 // switch theme
 const themesBtn = document.querySelector("#theme-btn");
@@ -62,6 +52,16 @@ themesBtn.addEventListener("click", () => {
     document.body.classList.toggle("dark-mode");
 });
 
-// favorites
+
+
+// toggle favorite btn
+const toggleFavBtn = document.querySelector("#toggle-favorite-btn")
+toggleFavBtn.addEventListener("click", () => {
+    almanac.toggleFavorite();
+});
 
 // compact view
+const compactBtn = document.querySelector("#compact-btn");
+compactBtn.addEventListener("click", () => {
+    toggleCompactView()
+});

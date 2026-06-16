@@ -2,7 +2,7 @@
 
 import Almanac from "./Almanac.mjs";
 import SunriseSunset from "./externalServices.mjs"
-import { toggleCompactView } from "./utils.mjs";
+import { toggleCompactView, triggerPageFlip } from "./utils.mjs";
 
 const almanac = new Almanac();
 const sunriseSunset = new SunriseSunset();
@@ -23,12 +23,14 @@ editNoteBtn.addEventListener("click", () => {
 const nextNoteBtn = document.querySelector("#next-note-btn");
 nextNoteBtn.addEventListener("click", () => {
     almanac.getNextEntry();
+    triggerPageFlip("next")
 });
 
 // listen for clicks on the "prevNote" button and call the corresponding function
 const prevNoteBtn = document.querySelector("#prev-note-btn");
 prevNoteBtn.addEventListener("click", () => {
     almanac.getPreviousEntry();
+    triggerPageFlip("prev")
 });
 
 // export btn
@@ -44,14 +46,16 @@ importBtn.addEventListener("click", () => {
 });
 
 // go to date
-// pendiente
+const goDateBtn = document.querySelector("#goto-btn");
+goDateBtn.addEventListener("click", () => {
+    almanac.goToDate();
+});
 
 // switch theme
 const themesBtn = document.querySelector("#theme-btn");
 themesBtn.addEventListener("click", () => {
     document.body.classList.toggle("dark-mode");
 });
-
 
 
 // toggle favorite btn

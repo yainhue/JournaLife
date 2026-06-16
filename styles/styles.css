@@ -4,7 +4,7 @@
     --accent1: #F0A202;
     --accent2: #AEC3B0;
     --accent3: #A3333D;
-    --bg: #ffffff;
+    /* --bg: #ffffff; */
     --surface: #f7f9f8;
     --header-bg: #4e2610;
     --text: #3b2f2f;
@@ -16,7 +16,7 @@
 
 /* DARK MODE: redefine variables */
 body.dark-mode {
-    --bg: #1e1e1e;
+    /* --bg: #1e1e1e; */
     --surface: #2a2a2a;
     --header-bg: #2b1a0f;
     --text: #f0f0f0;
@@ -59,6 +59,10 @@ header p {
     background-color: var(--main-bg);
     box-shadow: var(--shadow);
     padding: 1rem;
+}
+
+body {
+    background-color: var(--main-bg);
 }
 
 /* TITLES */
@@ -246,4 +250,33 @@ button:focus-visible {
 
 .favorites-dropdown-list.show {
     display: block;
+}
+
+/* STATS */
+
+.stats-enabled {
+    color: var(--secondary);
+}
+
+.stats-disabled {
+    color: gray;
+    font-weight: 200;
+}
+
+/* PAGE FLIP ANIM */
+
+@keyframes pageFadeSlide {
+    0% {
+        opacity: 0.8;
+        transform: translateX(20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.page-flip {
+    animation: pageFadeSlide 0.4s ease;
 }

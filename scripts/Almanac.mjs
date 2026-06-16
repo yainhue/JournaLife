@@ -1,11 +1,6 @@
 import { getLocalStorage, setLocalStorage } from "./utils.mjs";
 import Entry from "./Entry.mjs";
 
-
-// TO-DO
-// Handle next/previous day navigation (page-flip effect).
-// Handle “Go to Date” search.
-
 export default class Almanac {
     constructor() {
         this.currentDate = new Date();
@@ -77,7 +72,7 @@ export default class Almanac {
         authorDisplay.textContent = random.a
     }
 
-    saveNote(textareaElement) {
+    async saveNote(textareaElement) {
         // get current date key
         const dateKey = this.formatDate(this.currentDate);
 
@@ -86,11 +81,21 @@ export default class Almanac {
 
         // create a new paragraph element and set its text content to the updated text
         const updatedEntryDisplay = document.createElement("p");
-        updatedEntryDisplay.classList.add("entry");
+        await updatedEntryDisplay.classList.add("entry");
         updatedEntryDisplay.textContent = updatedText;
 
         // replace the textarea with the updated entry
         textareaElement.replaceWith(updatedEntryDisplay);
+
+        // get current entry (if it exists) or default to zero
+        let newTimesEdited = 0;
+
+        if (this.entries[dateKey]) {
+
+            // adds to the the times edited 
+            newTimesEdited = this.entries[dateKey].timesEdited + 1
+
+        }
 
         // store the entry in the entries property, using the current date as the key and the text as the value
         // create a new entry object to store the entry text
@@ -98,8 +103,16 @@ export default class Almanac {
 
         this.entries[dateKey] = entry;
 
+        // update last mod time
+        this.entries[dateKey].lastModified = this.entries[dateKey].formatLastModDate();
+        this.entries[dateKey].timesEdited = newTimesEdited;
+
         // store the updated entries object in local storage
         setLocalStorage("entries", this.entries);
+
+        // update displays
+        this.displayStats();
+        this.displayEmojiMood();
     }
 
     editNote() {
@@ -125,16 +138,13 @@ export default class Almanac {
         // replace the entry element with the textarea
         entry.replaceWith(textarea);
 
-        // listen for the "blur" event on the textarea (when it loses focus)
-        // textarea.addEventListener("blur", () => {
-        //     this.saveNote(textarea);
-        // });
-        // disabled, caused duplicate calls on the saveNote() function
-
-        saveBtn.addEventListener("click", () => {
+        // enable the save button and disable it once used
+        const handler = () => {
             this.saveNote(textarea);
-        });
+            saveBtn.removeEventListener("click", handler)
+        };
 
+        saveBtn.addEventListener("click", handler);
     }
 
     importAlmanac() {
@@ -204,11 +214,35 @@ export default class Almanac {
     }
 
     goToDate() {
-        // pendiente
+        // def elements
+        const goDateBtn = document.querySelector("#goto-btn");
+
+        // create input type "date"
+        const dateInput = document.createElement("input");
+        dateInput.type = "date";
+        dateInput.id = "goto-date-input";
+
+        // replace the button with the input
+        goDateBtn.replaceWith(dateInput);
+
+        // when a date is chosen..
+        dateInput.addEventListener("change", () => {
+            // get input and convert to date obj
+            const selectedDate = new Date(dateInput.value + "T00:00:00");
+
+            // update current date
+            this.currentDate = selectedDate;
+
+            // run init to display everything related to that date
+            this.init()
+
+            // put the button back
+            dateInput.replaceWith(goDateBtn);
+        });
     }
 
     deleteEntry() {
-        // pendiente
+        // pending
     }
 
     formatDate(date) {
@@ -355,7 +389,7 @@ export default class Almanac {
     setupEmojiMoodListeners() {
         // define elements
         const emojiDisplay = document.querySelector("#emoji-mood-display")
-        const emojiArray = ["😅", "😥", "😎", "😀"]
+        const emojiArray = ["😅", "😥", "😎", "😀", "🤔"]
 
         // get current date key
         const dateKey = this.formatDate(this.currentDate);
@@ -379,6 +413,52 @@ export default class Almanac {
 
     }
 
+    displayStats() {
+        // def elements
+        const wordCountDisplay = document.querySelector("#word-count-display")
+        const readingTimeDisplay = document.querySelector("#reading-time-display")
+        const lastModDisplay = document.querySelector("#last-mod-display")
+        const timesEditedDisplay = document.querySelector("#times-edited-display")
+
+
+        // get current date key
+        const dateKey = this.formatDate(this.currentDate);
+
+        // if the entry exists..
+        if (this.entries[dateKey]) {
+            // display stats
+            let wordCount = this.entries[dateKey].wordCount;
+            let readingTime = this.entries[dateKey].readingTime;
+            let lastMod = this.entries[dateKey].lastModified;
+            let timesEdited = this.entries[dateKey].timesEdited;
+
+            wordCountDisplay.className = "stats-enabled"
+            readingTimeDisplay.className = "stats-enabled"
+            lastModDisplay.className = "stats-enabled"
+            timesEditedDisplay.className = "stats-enabled"
+
+
+            wordCountDisplay.textContent = wordCount + " Words";
+            readingTimeDisplay.textContent = readingTime + " seconds to read";
+            lastModDisplay.textContent = "Last Modified: " + lastMod;
+            timesEditedDisplay.textContent = "Times Edited: " + timesEdited;
+        }
+
+        // if it does not
+        else {
+            wordCountDisplay.textContent = "Word Count";
+            readingTimeDisplay.textContent = "Reading Time";
+            lastModDisplay.textContent = "Last Modified";
+            timesEditedDisplay.textContent = "Times Edited";
+
+            wordCountDisplay.className = "stats-disabled"
+            readingTimeDisplay.className = "stats-disabled"
+            lastModDisplay.className = "stats-disabled"
+            timesEditedDisplay.className = "stats-disabled"
+        }
+
+    }
+
     init() {
         this.displayDate()
         this.displayQuote()
@@ -387,33 +467,8 @@ export default class Almanac {
         this.populateFavorites()
         this.displayEmojiMood()
         this.setupEmojiMoodListeners()
+        this.displayStats()
     }
 
 
 }
-
-
-
-/* manera vieja, cuando no era object-oriented.
-export default function displayDate() {
-    // define elements
-    const dayDisplay = document.getElementById("day-display");
-    const monthYearDispay = document.getElementById("month-year-display");
-
-    // get current date
-    const date = new Date();
-
-    // format day, month, and year
-    const weekdayFormatter = new Intl.DateTimeFormat("en-US", { weekday: "long" });
-    const dayFormatter = new Intl.DateTimeFormat("en-US", { day: "2-digit" });
-    const monthYearFormatter = new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric" });
-
-    const dayName = weekdayFormatter.format(date);
-    const dayNumber = dayFormatter.format(date);
-    const monthYear = monthYearFormatter.format(date);
-
-    // display formatted date
-    dayDisplay.textContent = `${dayName}, ${dayNumber}`;
-    monthYearDispay.textContent = monthYear;
-}
-*/

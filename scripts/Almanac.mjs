@@ -337,6 +337,8 @@ export default class Almanac {
             if (entry.favorite == true) {
                 const li = document.createElement("li");
                 li.textContent = entry.date;
+                li.setAttribute("role", "button");
+                li.setAttribute("tabindex", "0");
                 favoritesList.appendChild(li);
             }
 

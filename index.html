@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JournaLife</title>
     <link rel="stylesheet" href="styles/styles.css">
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
     <script src="scripts/main.mjs" type="module"></script>
 </head>
 
@@ -13,25 +14,31 @@
     <main>
 
         <header>
+            <button id="compact-btn">≡</button>
             <div id="header">
-                <p>JournaLife</p>
-                <button id="export-btn">Export entries</button>
-                <button id="import-btn">Import entries</button>
-                <button id="goto-btn">Go to date</button>
-                <button id="theme-btn">Switch theme</button>
-                <div class="favorites-dropdown">
-                    <button id="favorites-dropdown-btn">Favorites ⌄</button>
-                    <ul id="favorites-dropdown-list" class="favorites-dropdown-list">
-                    </ul>
+                <div class="logo-wrapper">
+                    <p>JournaLife</p>
+                    <img src="/images/logofinal.webp" alt="JournaLife Icon - An Open Notebook">
                 </div>
-
+                <div class="header-btns-wrapper">
+                    <button id="export-btn">Export entries</button>
+                    <button id="import-btn">Import entries</button>
+                    <button id="goto-btn">Go to date</button>
+                    <button id="theme-btn">Switch theme</button>
+                    <div class="favorites-dropdown">
+                        <button id="favorites-dropdown-btn">Favorites ⌄</button>
+                        <ul id="favorites-dropdown-list" class="favorites-dropdown-list">
+                        </ul>
+                    </div>
+                </div>
             </div>
-            <button id="compact-btn">Toggle Compact View</button>
+
         </header>
 
         <div class="main-wrapper">
             <h1 id="day-display">Day Date</h1>
-            <h2><span id="month-year-display">Month - Year</span> - <span id="emoji-mood-display">...</span></h2>
+            <h2><span id="month-year-display">Month - Year</span> - <span id="emoji-mood-display" role="button"
+                    tabindex="0">...</span></h2>
             <div class="quotes-wrapper">
                 <p class="quote"><span class="quoteText">Loading quote</span> - <span class="author">...</span></p>
             </div>
@@ -39,10 +46,12 @@
                 <p class="entry"></p>
             </div>
             <div class="controls-wrapper">
-                <button id="edit-note-btn">Edit</button>
-                <button id="save-note-btn">Save</button>
-                <button id="delete-btn">Delete</button>
-                <button id="toggle-favorite-btn"></button>
+                <div class="control-btns-wrapper">
+                    <button id="edit-note-btn">Edit</button>
+                    <button id="save-note-btn">Save</button>
+                    <button id="delete-btn">Delete</button>
+                    <button id="toggle-favorite-btn"></button>
+                </div>
                 <div class="stats-wrapper">
                     <p class="stats-disabled" id="word-count-display">Word Count</p>
                     <p class="stats-disabled" id="reading-time-display">Reading Time</p>
@@ -51,8 +60,8 @@
                 </div>
             </div>
             <div class="navigation-btns-wrapper">
-                <button id="prev-note-btn">⟪</button>
-                <button id="next-note-btn">⟫</button>
+                <button id="prev-note-btn">❬❬</button>
+                <button id="next-note-btn">❭❭</button>
             </div>
         </div>
 

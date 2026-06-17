@@ -3,7 +3,7 @@
     --secondary: #223318;
     --accent1: #F0A202;
     --accent2: #AEC3B0;
-    --accent3: #A3333D;
+    --accent3: #ce424e;
     --surface: #fdf6e3;
     --header-bg: #4e2610;
     --text: #3b2f2f;
@@ -247,6 +247,7 @@ input[type="date"] {
 .control-btns-wrapper {
     display: flex;
     justify-content: space-between;
+    gap: 1rem;
 }
 
 .control-btns-wrapper button {
@@ -375,7 +376,7 @@ span {
 }
 
 .stats-disabled {
-    color: gray;
+    color: var(--text);
     font-weight: 300;
     font-style: italic;
 }

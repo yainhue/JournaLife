@@ -192,6 +192,11 @@ textarea {
     border: none;
     outline: none;
     resize: none;
+    white-space: pre-line;
+}
+
+.entry p {
+    white-space: pre-line;
 }
 
 /* NAVIGATION BUTTONS */
